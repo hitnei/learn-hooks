@@ -11,6 +11,7 @@ const App = () => {
   const [dishes, setDishes] = useState([])
 
   const fetchDishes = async () => {
+    console.log('fetch dishes');
     const res = await fetch('http://my-json-server.typicode.com/leveluptuts/fakeapi/dishes')
     const data = await res.json()
     setDishes(data)
@@ -18,7 +19,7 @@ const App = () => {
 
   useEffect(() => {
     fetchDishes()
-  }, [])
+  }, [name])
 
   const reverseWord = word => {
     console.log('func called');
