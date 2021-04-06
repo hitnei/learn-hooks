@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, createContext, useMemo } from "react";
+import React, { useRef, createContext, useMemo } from "react";
 import Toggle from "./Toggle";
 import Counter from "./Counter";
 import { useTitleInput } from "./hooks/useTitleInput";
