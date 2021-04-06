@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, createContext, useMemo } from "react";
+import useAboutableFetch from 'use-abortable-fetch';
 import Toggle from "./Toggle";
 import Counter from "./Counter";
 import { useTitleInput } from "./hooks/useTitleInput";
@@ -8,26 +9,10 @@ export const UserContext = createContext();
 const App = () => {
   const [name, setName] = useTitleInput("");
   const ref = useRef();
-  const [dishes, setDishes] = useState([])
-
-  const fetchDishes = async () => {
-    console.log('fetch dishes');
-    const res = await fetch('http://my-json-server.typicode.com/leveluptuts/fakeapi/dishes')
-    const data = await res.json()
-    setDishes(data)
-  }
-
-  useEffect(() => {
-    fetchDishes()
-  }, [name])
-
-  const reverseWord = word => {
-    console.log('func called');
-    return word.split("").reverse().join('');
-  }
+  const { data, loading } = useAboutableFetch('http://my-json-server.typicode.com/leveluptuts/fakeapi/dishes')
+  if (!data) return null;
 
   const title = "Level Up Dishes"
-  const TitleReversed = useMemo(() => reverseWord(title), [title])
 
   return (
     <UserContext.Provider
@@ -37,7 +22,7 @@ const App = () => {
     >
       <div className="main-wrapper" ref={ref}>
         <h1 onClick={() => ref.current.classList.add("new-fake-class")}>
-          {TitleReversed}
+          {title}
         </h1>
         <Toggle />
         <Counter />
@@ -55,7 +40,7 @@ const App = () => {
           <button>Submit</button>
         </form>
 
-        {dishes.map((dish, index) => {
+        {data.map((dish, index) => {
           return (
             <article key={index} className="dish-card dish-card--withImage">
               <h3>{dish.name}</h3>
